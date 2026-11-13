@@ -1,0 +1,12 @@
+{
+ "product": "LOLA GDR LDEM_16 (PDS lrolol_1xxx, cylindrical/img/ldem_16.img)",
+ "source_sha256": "a511e40d7a3ea3275945b4da2a1df377133264fab0be94b7434b1cf8907254cb",
+ "ppd": 16,
+ "tile_deg": 15,
+ "tile_px": 240,
+ "rows": 12,
+ "cols": 24,
+ "encoding": "zlib(int16 little-endian), value x 0.5 m = height above 1737.4 km; row 0 = north edge of the tile",
+ "pixel_centres": "lat = 90 - (line + 0.5) / ppd, lon = (sample + 0.5) / ppd (east, 0-360)",
+ "file": "{i}_{j}.i16z, i = 0 at 90N..75N, j = 0 at 0..15E"
+}

@@ -1,0 +1,64 @@
+{
+ "regions": [
+  {
+   "id": "connecting-ridge",
+   "name": "Connecting Ridge",
+   "base": "/data/",
+   "extent_km": 10
+  },
+  {
+   "id": "shackleton-rim",
+   "name": "Shackleton Rim",
+   "base": "/data/regions/shackleton-rim/",
+   "extent_km": 5.0
+  },
+  {
+   "id": "peak-near-shackleton",
+   "name": "Peak near Shackleton",
+   "base": "/data/regions/peak-near-shackleton/",
+   "extent_km": 5.0
+  },
+  {
+   "id": "de-gerlache-rim",
+   "name": "de Gerlache Rim",
+   "base": "/data/regions/de-gerlache-rim/",
+   "extent_km": 5.0
+  },
+  {
+   "id": "malapert-massif",
+   "name": "Malapert Massif",
+   "base": "/data/regions/malapert-massif/",
+   "extent_km": 5.0
+  },
+  {
+   "id": "nobile-rim-1",
+   "name": "Nobile Rim 1",
+   "base": "/data/regions/nobile-rim-1/",
+   "extent_km": 5.0
+  },
+  {
+   "id": "nobile-rim-2",
+   "name": "Nobile Rim 2",
+   "base": "/data/regions/nobile-rim-2/",
+   "extent_km": 5.0
+  },
+  {
+   "id": "haworth",
+   "name": "Haworth",
+   "base": "/data/regions/haworth/",
+   "extent_km": 5.0
+  },
+  {
+   "id": "im2-athena",
+   "name": "IM-2 Athena (landed)",
+   "base": "/data/regions/im2-athena/",
+   "extent_km": 5.0
+  },
+  {
+   "id": "im2-target",
+   "name": "IM-2 target",
+   "base": "/data/regions/im2-target/",
+   "extent_km": 5.0
+  }
+ ]
+}
