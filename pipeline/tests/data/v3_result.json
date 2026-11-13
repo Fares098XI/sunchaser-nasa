@@ -1,0 +1,149 @@
+{
+ "rows": [
+  {
+   "site": "connecting-ridge",
+   "product": "AVGVISIB_85S_060M_201608.TIF",
+   "sun": {
+    "ours": 88.5,
+    "pgda": 68.48,
+    "diff": 20.01
+   },
+   "earth": {
+    "ours": 58.12,
+    "pgda": 57.5,
+    "diff": 0.62
+   }
+  },
+  {
+   "site": "shackleton-rim",
+   "product": "AVGVISIB_85S_060M_201608.TIF",
+   "sun": {
+    "ours": 76.95,
+    "pgda": 66.24,
+    "diff": 10.71
+   },
+   "earth": {
+    "ours": 49.47,
+    "pgda": 45.22,
+    "diff": 4.25
+   }
+  },
+  {
+   "site": "peak-near-shackleton",
+   "product": "AVGVISIB_85S_060M_201608.TIF",
+   "sun": {
+    "ours": 83.42,
+    "pgda": 58.22,
+    "diff": 25.2
+   },
+   "earth": {
+    "ours": 55.42,
+    "pgda": 45.98,
+    "diff": 9.43
+   }
+  },
+  {
+   "site": "de-gerlache-rim",
+   "product": "AVGVISIB_85S_060M_201608.TIF",
+   "sun": {
+    "ours": 86.04,
+    "pgda": 79.38,
+    "diff": 6.66
+   },
+   "earth": {
+    "ours": 62.03,
+    "pgda": 61.4,
+    "diff": 0.63
+   }
+  },
+  {
+   "site": "malapert-massif",
+   "product": "AVGVISIB_85S_060M_201608.TIF",
+   "sun": {
+    "ours": 83.95,
+    "pgda": 81.89,
+    "diff": 2.06
+   },
+   "earth": {
+    "ours": 60.2,
+    "pgda": 58.7,
+    "diff": 1.5
+   }
+  },
+  {
+   "site": "nobile-rim-1",
+   "product": "AVGVISIB_85S_060M_201608.TIF",
+   "sun": {
+    "ours": 85.35,
+    "pgda": 83.15,
+    "diff": 2.21
+   },
+   "earth": {
+    "ours": 62.93,
+    "pgda": 59.88,
+    "diff": 3.05
+   }
+  },
+  {
+   "site": "nobile-rim-2",
+   "product": "AVGVISIB_75S_120M_201608.TIF",
+   "sun": {
+    "ours": 54.7,
+    "pgda": 53.88,
+    "diff": 0.83
+   },
+   "earth": {
+    "ours": 77.3,
+    "pgda": 71.79,
+    "diff": 5.51
+   }
+  },
+  {
+   "site": "haworth",
+   "product": "AVGVISIB_85S_060M_201608.TIF",
+   "sun": {
+    "ours": 75.32,
+    "pgda": 70.49,
+    "diff": 4.83
+   },
+   "earth": {
+    "ours": 62.26,
+    "pgda": 60.1,
+    "diff": 2.15
+   }
+  },
+  {
+   "site": "im2-athena",
+   "product": "AVGVISIB_85S_060M_201608.TIF",
+   "sun": {
+    "ours": 46.9,
+    "pgda": 45.1,
+    "diff": 1.79
+   },
+   "earth": {
+    "ours": 94.23,
+    "pgda": 92.08,
+    "diff": 2.15
+   }
+  },
+  {
+   "site": "im2-target",
+   "product": "AVGVISIB_85S_060M_201608.TIF",
+   "sun": {
+    "ours": 46.66,
+    "pgda": 46.22,
+    "diff": 0.44
+   },
+   "earth": {
+    "ours": 94.24,
+    "pgda": 92.82,
+    "diff": 1.42
+   }
+  }
+ ],
+ "within_10pt": {
+  "sun": 7,
+  "earth": 10
+ },
+ "PASS": false
+}

@@ -1,0 +1,10 @@
+{
+ "blocks": 6889,
+ "pearson_r": 0.9645,
+ "median_diff_pt": 2.68,
+ "within_10pt": 0.9279,
+ "ours_mean": 32.41,
+ "pgda_mean": 28.74,
+ "hours": 19008,
+ "PASS": true
+}

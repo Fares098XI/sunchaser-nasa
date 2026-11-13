@@ -1,0 +1,23 @@
+{
+ "rows": [
+  {
+   "site": "connecting-ridge",
+   "ours_60m": 88.88,
+   "pgda": 68.48,
+   "diff": 20.4
+  },
+  {
+   "site": "shackleton-rim",
+   "ours_60m": 67.86,
+   "pgda": 66.24,
+   "diff": 1.62
+  },
+  {
+   "site": "peak-near-shackleton",
+   "ours_60m": 84.09,
+   "pgda": 58.22,
+   "diff": 25.86
+  }
+ ],
+ "PASS": false
+}
