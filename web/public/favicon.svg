@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffe9a6"/>
+      <stop offset=".45" stop-color="#ffcf5c"/>
+      <stop offset=".75" stop-color="#f5c451"/>
+      <stop offset="1" stop-color="#c8892b"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#ffcf5c" stop-opacity=".55"/>
+      <stop offset="1" stop-color="#ffa63d" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="earth" cx="30%" cy="30%" r="80%">
+      <stop offset="0" stop-color="#eef6fb"/>
+      <stop offset=".3" stop-color="#6fe3e1"/>
+      <stop offset=".65" stop-color="#3fa9f5"/>
+      <stop offset="1" stop-color="#1f6fd1"/>
+    </radialGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="#05060a"/>
+  <rect x="1" y="1" width="62" height="62" rx="13" fill="none" stroke="url(#gold)" stroke-opacity=".55" stroke-width="2"/>
+  <circle cx="30" cy="38" r="28" fill="url(#glow)"/>
+  <g stroke="#ffcf5c" stroke-width="3.4" stroke-linecap="round">
+    <line x1="30" y1="12" x2="30" y2="17"/>
+    <line x1="30" y1="12" x2="30" y2="17" transform="rotate(-45 30 38)"/>
+    <line x1="30" y1="12" x2="30" y2="17" transform="rotate(45 30 38)"/>
+  </g>
+  <circle cx="30" cy="38" r="15" fill="url(#gold)"/>
+  <path d="M0 46 Q10 39 20 43 Q30 47 40 41 Q52 35 64 43 L64 64 L0 64 Z" fill="#0b0d12"/>
+  <path d="M0 46 Q10 39 20 43 Q30 47 40 41 Q52 35 64 43" fill="none" stroke="url(#gold)" stroke-width="2.4"/>
+  <circle cx="52" cy="14" r="5.5" fill="url(#earth)"/>
+</svg>
