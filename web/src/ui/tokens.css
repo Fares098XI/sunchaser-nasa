@@ -1,0 +1,54 @@
+/* Syzygy (docs/UI_PLAN.md): Sun = gold, fire and corona; Earth = ocean, lagoon and aurora; Moon = highland and
+   regolith, for everything you read. Text pairs are checked by scripts/contrast.mjs (>= 4.5:1). */
+:root {
+  /* Sun */
+  --corona: #fff4d6;
+  --gold-leaf: #ffe9a6;
+  --gold: #f5c451;
+  --gold-bright: #ffcf5c;
+  --gold-antique: #c8892b;
+  --gold-bronze: #8a5a12;
+  --amber: #ffa63d;
+  --flare: #ff7a3d;
+  --prominence: #f0533f;
+  --gold-metal: linear-gradient(180deg, #ffe9a6, #f5c451 46%, #c8892b);
+  /* Earth */
+  --cloud: #eef6fb;
+  --lagoon: #6fe3e1;
+  --ocean: #3fa9f5;
+  --ocean-deep: #1f6fd1; /* fills only: 3.8:1 */
+  --aurora: #6be6a6;
+  /* Moon */
+  --highland: #f3f1ec;
+  --regolith: #c2beb5;
+  --dust: #8e8a82;
+  --mare: #5e5b56; /* fills only */
+  --void: #050608;
+  --surface: #0e1117;
+  --raised: #171b23;
+  --line: #262b35;
+  --marginal: #c4a8ff;
+
+  /* the names the app already uses, now on the Syzygy palette */
+  --panel: rgba(14, 17, 23, 0.84);
+  --blur: 14px;
+  --ink: #e6e3dc;
+  --dim: var(--dust);
+  --sun: var(--gold);
+  --sun-hi: var(--gold-leaf);
+  --earth: var(--lagoon);
+  --danger: var(--prominence);
+  --ok: var(--aurora);
+  --psr: #1b2140;
+
+  --font-head: "Space Grotesk", system-ui, sans-serif;
+  --font-ui: "Inter", system-ui, sans-serif;
+  --font-num: "JetBrains Mono", ui-monospace, monospace;
+
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --t-ui: 240ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --t-ui: 0ms; }
+}
