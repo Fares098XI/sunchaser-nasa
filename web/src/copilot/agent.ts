@@ -1,5 +1,5 @@
 /**
- * Ask Sunchaser's loop: send the conversation to /api/copilot, run the tools the model asks for on the app's engine,
+ * Ask Sunchaser's loop: send the conversation to /api/copilot, run the tools the model asks for on the engine,
  * send the results back, until the model answers (at most MAX_ROUNDS). Any failure (no internet, every free quota busy,
  * no keys) falls back to the offline router, so a question always gets an answer.
  */
