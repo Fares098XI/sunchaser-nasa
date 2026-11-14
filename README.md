@@ -1,4 +1,4 @@
-# Sunchaser
+# Sunchaser (Eternal Light)
 
 **Follow the Sun. Stay in touch with Earth.**
 
