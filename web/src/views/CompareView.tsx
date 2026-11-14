@@ -25,7 +25,7 @@ const COLS: Col[] = [
     tip: "Longest stretch without a direct-to-Earth link." },
   { key: "energyWhM2Day", label: "Solar energy", unit: "kWh/m²/d", better: "high", fmt: (v) => (v / 1000).toFixed(1),
     tip: "Sunlight energy reaching 1 m^2 of a Sun-tracking panel per day, at the true Sun distance (TSI 1361 W/m^2; multiply by panel efficiency)." },
-  { key: "batteryMinPct", label: "Battery low", unit: "%", better: "high", fmt: (v) => v.toFixed(0),
+  { key: "batteryMinPct", label: "Lowest battery", unit: "%", better: "high", fmt: (v) => v.toFixed(0),
     tip: "Lowest battery charge over the stay for the power system shown (starts full). 0 % means the load could not always be met — see the hours below the value." },
 ];
 
@@ -183,7 +183,7 @@ export function CompareView({ start, days, z, power, onChange, onExplore, onAllL
                         {c.key === "dtePct" && clock?.by[id] && <Lasts c={clock.by[id].dte} stepH={clock.stepH} on="ends in" off="none · starts in" />}
                       </td>
                     ))}
-                    <td className="num">{s.terrain ? <>{s.terrain.slope.p95_deg.toFixed(1)}°<small className="short"> median {s.terrain.slope.median_deg.toFixed(1)}°</small></>
+                    <td className="num">{s.terrain ? <>{s.terrain.slope.p95_deg.toFixed(1)}°<small className="short"> steepest 5 % · median {s.terrain.slope.median_deg.toFixed(1)}°</small></>
                       : <span className="dim" title="Polar sites only: 100 m landing slopes need the 20 m polar terrain">–</span>}</td>
                     <td className="num">{!s.terrain ? <span className="dim" title="Polar sites only (needs the 20 m polar terrain and the permanent-shadow map)">–</span>
                       : s.terrain.psr_km != null ? `${s.terrain.psr_km.toFixed(1)} km` : "> 40 km"}</td>
@@ -279,20 +279,24 @@ function PinForm({ pin, onPin, onShowGlobe }: { pin?: PinState | null; onPin: (l
 /** The answer before the table: which site wins each requirement over this period, and how many keep their light. */
 function Insights({ rows, byId, days, onOpen }: { rows: { id: string; m: Metrics }[]; byId: Record<string, SiteEntry>; days: number; onOpen: (id: string) => void }) {
   const pick = (k: keyof Metrics, hi: boolean) => rows.reduce((a, b) => ((hi ? b.m[k] > a.m[k] : b.m[k] < a.m[k]) ? b : a));
-  const cards: [string, React.ReactNode, { id: string; m: Metrics }, string][] = [
-    ["Most sunlight", <SunIcon size={14} />, pick("sunPct", true), `${pick("sunPct", true).m.sunPct.toFixed(1)} % of the time`],
-    ["Best link to Earth", <EarthIcon size={14} />, pick("dtePct", true), `${pick("dtePct", true).m.dtePct.toFixed(1)} % of the time`],
-    ["Shortest blackout", <EarthIcon size={14} />, pick("blackoutH", false), `longest gap ${fmtH(pick("blackoutH", false).m.blackoutH)}`],
-    ["Most energy", <SunIcon size={14} />, pick("energyWhM2Day", true), `${(pick("energyWhM2Day", true).m.energyWhM2Day / 1000).toFixed(1)} kWh/m² a day`],
+  const cards: [string, React.ReactNode, keyof Metrics, boolean, (v: number) => string][] = [
+    ["Most sunlight", <SunIcon size={14} />, "sunPct", true, (v) => `${v.toFixed(1)} % of the time`],
+    ["Best link to Earth", <EarthIcon size={14} />, "dtePct", true, (v) => `${v.toFixed(1)} % of the time`],
+    ["Shortest blackout", <EarthIcon size={14} />, "blackoutH", false, (v) => `longest gap ${fmtH(v)}`],
+    ["Most energy", <SunIcon size={14} />, "energyWhM2Day", true, (v) => `${(v / 1000).toFixed(1)} kWh/m² a day`],
   ];
   const lit = rows.filter((r) => r.m.darkH === 0).length, deaf = rows.filter((r) => r.m.earthPct === 0).length;
   return (
     <div className="insights">
-      {cards.map(([t, icon, r, v]) => (
-        <button key={t} className="insight" onClick={() => onOpen(r.id)} title="Open its horizon view">
-          <span className="dim">{icon} {t}</span><b>{byId[r.id]?.name}</b><span className="num">{v}</span>
-        </button>
-      ))}
+      {cards.map(([t, icon, k, hi, fmt]) => {
+        const r = pick(k, hi), v = fmt(r.m[k]);
+        const tied = rows.filter((x) => x !== r && fmt(x.m[k]) === v).length; // equal as shown = no real winner among them
+        return (
+          <button key={t} className="insight" onClick={() => onOpen(r.id)} title="Open its horizon view">
+            <span className="dim">{icon} {t}</span><b>{byId[r.id]?.name}{tied ? <small className="dim"> + {tied} tied</small> : null}</b><span className="num">{v}</span>
+          </button>
+        );
+      })}
       <p className="insight-note dim">Over these {days} days: <b>{lit}</b> of {rows.length} sites never lose the Sun{deaf ? <>, <b>{deaf}</b> never see Earth (far side)</> : null}.
         Click a card for its horizon view.</p>
     </div>

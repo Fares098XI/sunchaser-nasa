@@ -179,7 +179,7 @@ const KPIS: { key: keyof Metrics; label: string; better: 1 | -1; fmt: (v: number
   { key: "darkH", label: "Longest night", better: -1, fmt: fmtH },
   { key: "dtePct", label: "Link to Earth", better: 1, fmt: (v) => `${v.toFixed(0)} %`, icon: "earth" },
   { key: "blackoutH", label: "Longest blackout", better: -1, fmt: fmtH },
-  { key: "batteryMinPct", label: "Battery low", better: 1, fmt: (v) => `${v.toFixed(0)} %` },
+  { key: "batteryMinPct", label: "Lowest battery", better: 1, fmt: (v) => `${v.toFixed(0)} %` },
 ];
 
 function ScenarioCard({ i, s, sites, run, base, req, minIso, maxIso, onSet, onRemove, onExplore }: {
@@ -373,7 +373,7 @@ function MissionBrief({ title, board, sites, data, req, power, zM, onClose }: {
 
         <h2>1 · Scenarios</h2>
         <table>
-          <thead><tr><th></th><th>Site</th><th>Landing (UTC)</th><th>Stay</th><th>Verdict</th><th>Sunlight</th><th>Longest night</th><th>Link</th><th>Longest blackout</th><th>Battery low</th><th>Solar kWh/m²/d</th></tr></thead>
+          <thead><tr><th></th><th>Site</th><th>Landing (UTC)</th><th>Stay</th><th>Verdict</th><th>Sunlight</th><th>Longest night</th><th>Link</th><th>Longest blackout</th><th>Lowest battery</th><th>Solar kWh/m²/d</th></tr></thead>
           <tbody>{board.map((s, i) => {
             const r = data.runs[i], e = sites[s.site];
             return <tr key={i}><td><b>{LETTERS[i]}</b></td><td>{e?.name ?? s.site} <small>{ll(e)}</small></td><td>{s.iso.replace("T", " ")}</td><td>{s.days} d</td>

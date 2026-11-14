@@ -121,9 +121,9 @@ function Im2Story(p: Props) {
         <p className="dim">GO here means the app's default checks: sunlight at least 70 % and the steepest 5 % of the circle under 8°. Try hard: almost
           everywhere the maps say the same thing.</p>
       </>, figure: map({ drag: true, ring: true }) },
-    { kicker: "03 · 250 metres · what happened", title: "It came down 370 metres away. Still GO.",
+    { kicker: "03 · 250 metres · what happened", title: "It came down about 250 metres off target. Still GO.",
       body: <>
-        <p>NASA's LRO camera later found Athena about 370 m from the published target (the target is given to 2 decimals, ±150 m). On our maps that spot is as good as the target:</p>
+        <p>Intuitive Machines reported a touchdown about 250 m from the target. On NASA's LRO image Athena lies about 370 m from the published target, which is only given to 2 decimals (±150 m). On our maps that spot is as good as the target:</p>
         <div className="st-pair">{readout(tgt, "Target")}{readout(ath, "Where Athena stopped")}</div>
         <p>Same sunlight, gentle slope. By every number a planner had, this was a safe place to be.</p>
       </>, figure: map({ athena: true, ring: true }) },

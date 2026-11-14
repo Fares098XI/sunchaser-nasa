@@ -50,7 +50,7 @@ export const CAPTIONS: Caption[] = [
   { from: 55.5, to: 61.2, text: "This drive crosses {dark} of darkness on battery and never drops below {soc}." },
   { from: 62, to: 68.3, text: "Earth from the landing site, in its true phase, with the Deep Space Network dishes that can hear you." },
   { from: 70.5, to: 76.6, text: "Stand where the lander will stand. This horizon is the one behind every number." },
-  { from: 76.8, to: 83.6, text: "Every number is checked against NASA: JPL ephemerides to 0.000002°, Goddard's sunlight maps within half a point." },
+  { from: 76.8, to: 83.6, text: "Every number is checked against NASA: JPL ephemerides to 0.000002°, Goddard's published sunlight results within 0.2 points." },
   { from: 84, to: 90, text: "Other tools tell you where to land. Sunchaser tells you how to survive.", kind: "end" },
 ];
 

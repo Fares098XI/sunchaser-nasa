@@ -15,7 +15,7 @@ const CHAPTERS: Chapter[] = [
     body: "Some craters near the pole have floors that never see the Sun. They are cold enough to trap water ice, which future crews could turn into water, air and rocket fuel. That is why NASA's Artemis III candidate landing regions are all here. But the light is extreme: within a few kilometres, ridges can be lit most of the time while hollows stay dark.",
     see: ["See the hero region in 3D", "explore"] },
   { id: "skims", part: "The problem", title: "The Sun skims the horizon", figure: "tilt",
-    body: "The Moon's spin axis is tilted only about 1.5° from the plane of Earth's orbit. At the pole the Sun therefore never climbs high: it circles once around the sky every month, always within about 1.5° of the flat horizon. A ridge a few hundred metres high, kilometres away, is enough to hide it.",
+    body: "The Moon's spin axis stands almost upright to the plane of Earth's orbit: it leans only about 1.5°. At the pole the Sun therefore never climbs high: it circles once around the sky every month, always within about 1.5° of the flat horizon. A ridge a few hundred metres high, kilometres away, is enough to hide it.",
     see: ["Drag the Sun across the month", "explore"] },
   { id: "horizon", part: "How Sunchaser sees it", title: "A terrain horizon for every spot", figure: "horizon",
     body: "For each spot and each compass direction, Sunchaser finds the highest angle of the terrain, walking outward over NASA's LOLA laser-altimeter elevation maps to 300 km on the curved Moon. Compare that skyline with the Sun's height in the same direction and you know, every 10 minutes, whether the spot is lit. The walk is exact: denser sampling never finds a point higher than 0.00001°.",
@@ -26,7 +26,7 @@ const CHAPTERS: Chapter[] = [
     body: "Seen from the Moon, Earth hangs in almost the same place, but the Moon's slight wobble (libration) makes it rise and sink by a few degrees over each month. At the pole Earth sits near the horizon, so it often drops behind the terrain: watch the blue disc in the horizon view above. While it is hidden, a lander cannot radio home directly.",
     see: ["Watch Earth in the 3D sky", "explore"] },
   { id: "dte", part: "How Sunchaser sees it", title: "Talking to Earth", figure: "dte",
-    body: "Direct-to-Earth communication needs two things at once. Sunchaser gives Earth and comms the same weight as the Sun and power everywhere.",
+    body: "Direct-to-Earth communication needs two things at once: Earth above the local terrain, and a Deep Space Network antenna on Earth that sees the Moon at least 6° above its own horizon. Sunchaser gives Earth and comms the same weight as the Sun and power everywhere.",
     see: ["Find windows with enough link time", "windows"] },
   { id: "psr", part: "How Sunchaser sees it", title: "Permanent shadow",
     body: "Permanently shadowed regions (PSRs) are where the ice may be. Sunchaser shows NASA Goddard's permanent-shadow map and, for any point, how far the nearest one is: close enough to reach, far enough to land in sunlight.",
@@ -34,7 +34,7 @@ const CHAPTERS: Chapter[] = [
   { id: "land", part: "Deciding", title: "Choosing where to land", figure: "sites",
     body: "NASA picked the Artemis III regions on four criteria: sunlight, Earth communications, gentle slopes over a landing circle about 100 m across, and closeness to permanent shadow. Sunchaser computes all four for every site, the light and comms for any date from 2020 to 2045. Pick a site:" },
   { id: "aim", part: "Deciding", title: "Where exactly you touch down",
-    body: "A lander does not come down on a pinpoint: IM-2 came to rest hundreds of metres from its target. At the pole, 250 m can be the difference between a lit ridge and a shadowed hollow. For every site Sunchaser checks 19 landing points out to 250 m, and in the 3D view paints the sunlight of every spot within 300 m so you can see which way an error would hurt.",
+    body: "A lander does not come down on a pinpoint: IM-2 came to rest about 250 m from its target. At the pole, 250 m can be the difference between a lit ridge and a shadowed hollow. For every site Sunchaser checks 19 landing points out to 250 m, and in the 3D view paints the sunlight of every spot within 300 m so you can see which way an error would hurt.",
     see: ["See the landing heat map in 3D", "explore"] },
   { id: "slip", part: "Deciding", title: "When the launch slips",
     body: "Launches slip by days or weeks, and the light at a polar site follows a monthly rhythm, so a good date can turn bad overnight. Replan re-checks every site for every day around the plan, finds the next good date at the same site and the best nearby Plan B. The scenario board then puts up to four plans side by side on one mission clock and explains what changed, split between the date and the site.",
@@ -92,7 +92,7 @@ export function LearnView({ onGo }: { onGo: (m: Go) => void }) {
         <div className="learn-stats">
           <div><b className="num">~1.5°</b><span>the Moon's axis tilt: the Sun never rises high</span></div>
           <div><b className="num">25</b><span>landing sites, from the south pole to Apollo, Chang'e and CLPS</span></div>
-          <div><b className="num">{pass}/{CHECKS.length}</b><span>independent checks pass</span></div>
+          <div><b className="num">{CHECKS.length}</b><span>independent checks: {pass} pass{resolved ? `, ${resolved} failed first and were explained` : ""}</span></div>
         </div>
       </header>
 

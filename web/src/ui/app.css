@@ -404,8 +404,8 @@ table.compare tbody tr { cursor: pointer; }
 .check.pass { box-shadow: inset 3px 0 0 rgba(107, 230, 166, 0.6); }
 .check.fail { box-shadow: inset 3px 0 0 rgba(240, 83, 63, 0.7); }
 .check.pending { box-shadow: inset 3px 0 0 var(--line); }
-.check-head { display: flex; gap: 10px; align-items: center; margin-bottom: 8px; }
-.check-head h3 { flex: 1; margin: 0; font: 500 16px var(--font-head); }
+.check-head { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; margin-bottom: 8px; }
+.check-head h3 { flex: 1 1 150px; margin: 0; font: 500 16px var(--font-head); } /* a wide status pill wraps below instead of squeezing the title */
 .check-id { color: var(--sun); font-size: 13.5px; min-width: 32px; }
 .check dl { margin: 0; display: grid; gap: 6px; font-size: 14px; }
 .check dt { color: var(--dim); font-size: 12.5px; letter-spacing: 0.08em; text-transform: uppercase; }
@@ -587,7 +587,7 @@ table.compare td small.short { display: block; font-size: 12px; color: var(--dan
 }
 .home-tag { margin: 0 0 18px; font-family: var(--font-head); font-size: clamp(16px, 1.6vw, 21px); color: var(--ink); letter-spacing: 0.02em; }
 .home-lede { margin: 0 0 22px; font-size: 15.5px; line-height: 1.6; color: #9aa8bb; max-width: 470px; }
-.home-live { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 13.5px; color: var(--ink); margin-bottom: 26px; }
+.home-live { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 13.5px; color: var(--ink); margin-bottom: 26px; max-width: 470px; } /* same width as the text above: the chips wrap before they reach the Moon */
 .live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 3px rgba(107, 230, 166, 0.18), 0 0 12px var(--ok); animation: pulse 2s ease-in-out infinite; }
 @keyframes pulse { 50% { box-shadow: 0 0 0 6px rgba(107, 230, 166, 0.05), 0 0 16px var(--ok); } }
 .home-chip { display: inline-flex; align-items: center; gap: 5px; padding: 3px 9px; border-radius: 99px; border: 1px solid var(--line); background: rgba(5, 6, 8, 0.5); }
@@ -620,6 +620,10 @@ table.compare td small.short { display: block; font-size: 12px; color: var(--dan
 .earth-inset .eyebrow { font-size: 12px; }
 @media (max-width: 1700px) { .earth-inset { bottom: 100px; } }
 @media (max-width: 760px) { .earth-inset { display: none; } }
+/* short laptop screens (768 px and below): a tighter menu stays clear of the Earth box; very short ones drop the box */
+@media (min-width: 761px) and (max-height: 860px) { body .rail button { min-height: 38px; } } /* body: beats the 44 px rule further down */
+@media (min-width: 761px) and (max-height: 760px) { body .rail button { min-height: 33px; } }
+@media (min-width: 761px) and (max-height: 680px) { .earth-inset { display: none; } }
 
 .pin-label.floating { position: absolute; left: 0; top: 0; pointer-events: none; opacity: 0; transition: opacity 200ms; will-change: transform; z-index: 1; }
 /* Sun / Earth out of view: which way to turn (scene/skyPick.tsx SkyArrows) */
@@ -656,7 +660,7 @@ table.compare td small.short { display: block; font-size: 12px; color: var(--dan
 .earth-inset { cursor: pointer; transition: border-color var(--t-ui) var(--ease), transform var(--t-ui) var(--ease); }
 .earth-inset:hover { border-color: rgba(111, 227, 225, 0.4); transform: translateY(-1px); }
 .earth-inset:focus-visible, .view-reset:focus-visible { outline: 2px solid var(--earth); outline-offset: 2px; }
-.view-reset { position: absolute; top: 16px; right: 356px; display: inline-flex; align-items: center; gap: 7px; padding: 8px 13px; font-size: 13.5px; color: var(--ink); cursor: pointer; }
+.view-reset { position: absolute; top: 16px; right: 400px; /* clear of the inspector: 16 px margin + 372 px + a gap */ display: inline-flex; align-items: center; gap: 7px; padding: 8px 13px; font-size: 13.5px; color: var(--ink); cursor: pointer; }
 .view-reset:hover { border-color: rgba(194, 190, 181, 0.35); }
 @media (max-width: 760px) { .view-reset { top: auto; right: 12px; bottom: calc(46% + 96px); } .focus-card { left: 12px; right: 12px; width: auto; } }
 
@@ -792,6 +796,8 @@ body.astro-helmet canvas { cursor: none; }
 .tour-shield { position: absolute; inset: 0; pointer-events: auto; cursor: default; }
 .tour-cap { position: absolute; left: 0; right: 0; bottom: 150px; margin: 0 auto; width: min(760px, calc(100% - 32px)); text-align: center; animation: capin 600ms var(--ease) both; }
 .tour-cap.low { bottom: 250px; }
+/* a dark band behind subtitles so they stay readable over the bright, sunlit Moon */
+.tour-cap:not(.title):not(.end) p { display: inline-block; padding: 8px 18px; border-radius: 12px; background: rgba(5, 6, 8, 0.6); backdrop-filter: blur(6px); }
 .tour-cap p { margin: 0; font: 500 clamp(17px, 2.1vw, 24px)/1.4 var(--font-head); color: #f4f1ea; text-shadow: 0 2px 18px rgba(0, 0, 0, 0.95), 0 0 2px rgba(0, 0, 0, 0.9); letter-spacing: 0.005em; }
 .tour-cap.title, .tour-cap.end { top: 0; bottom: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0) 65%); }
 .tour-cap.end p { font-size: clamp(20px, 2.8vw, 32px); max-width: 720px; }

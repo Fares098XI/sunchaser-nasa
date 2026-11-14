@@ -903,8 +903,8 @@ export default function App() {
             <h1 className="home-title">SUNCHASER</h1>
             <p className="home-tag">Follow the <span className="sun-word">Sun</span>, stay in touch with <span className="earth-word">Earth</span>.</p>
             <p className="home-lede">
-              Any landing site on the Moon, lit exactly as it will be, for any hour from 2020 to 2045: the south pole in 20 m detail,
-              anywhere else at 59 m, real Sun and Earth positions, validated against JPL and Goddard.
+              Any landing site on the Moon, lit exactly as it will be: the south pole in 20 m detail, anywhere else from NASA's global maps,
+              real Sun and Earth positions validated against JPL and Goddard. Explore any hour from 2020 to 2045; plan landings from Nov 2026 to Dec 2028.
             </p>
             <div className="home-live num">
               <span className="home-chip live"><span className="live-dot" aria-hidden /> Live · {fmtDate(hourToMs(idx, hour))}, {isoHour(hourToMs(idx, hour)).slice(11)}:00 UTC · {m.region.name.replace(/ \(.*\)$/, "")}</span>
@@ -924,7 +924,7 @@ export default function App() {
               <PinIcon size={14} />
               <input id="goto-input" value={gotoText} onChange={(e) => { setGotoText(e.target.value); setGotoBad(false); }} placeholder="e.g. 26.13 N, 3.63 E" aria-invalid={gotoBad} spellCheck={false} />
               <button type="submit" disabled={!gotoText.trim()}>Fly there</button>
-              {gotoBad && <span className="goto-bad">latitude, longitude in degrees (12.5 S, 33 E or −12.5, 33)</span>}
+              {gotoBad && <span className="goto-bad">latitude (90 S to 90 N), longitude in degrees: 12.5 S, 33 E or −12.5, 33</span>}
             </form>
             {!pin && <p className="home-pin-hint"><PinIcon size={13} /> Or tap anywhere on the Moon: Sunchaser computes the Sun, Earth and horizon at your own landing point.</p>}
           </div>

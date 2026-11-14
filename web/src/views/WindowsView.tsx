@@ -242,27 +242,27 @@ export function ReqFields({ req, z, power, onChange, zs }: {
   return (
     <>
         <Field label="Surface stay" value={`${req.days} d`}>
-          <input type="range" min={1} max={60} value={req.days} onChange={(e) => set({ days: Number(e.target.value) })} />
+          <input type="range" aria-label="Surface stay, days" min={1} max={60} value={req.days} onChange={(e) => set({ days: Number(e.target.value) })} />
         </Field>
         <Field label="Min. sunlight on panels" value={`${req.minSunPct}%`} tip="Average visible fraction of the solar disc over the stay.">
-          <input type="range" min={0} max={100} value={req.minSunPct} onChange={(e) => set({ minSunPct: Number(e.target.value) })} />
+          <input type="range" aria-label="Minimum sunlight, percent" min={0} max={100} value={req.minSunPct} onChange={(e) => set({ minSunPct: Number(e.target.value) })} />
         </Field>
         <Field label="Longest darkness" value={req.maxDarkH == null ? "no limit" : fmtH(req.maxDarkH)} tip="Battery: longest stretch with no Sun.">
-          <label className="inline"><input type="checkbox" checked={req.maxDarkH != null}
+          <label className="inline"><input type="checkbox" aria-label="Limit the longest darkness" checked={req.maxDarkH != null}
             onChange={(e) => set({ maxDarkH: e.target.checked ? 48 : null })} /> limit</label>
-          {req.maxDarkH != null && <input type="range" min={1} max={240} value={req.maxDarkH} onChange={(e) => set({ maxDarkH: Number(e.target.value) })} />}
+          {req.maxDarkH != null && <input type="range" aria-label="Longest darkness, hours" min={1} max={240} value={req.maxDarkH} onChange={(e) => set({ maxDarkH: Number(e.target.value) })} />}
         </Field>
         <Field label="Min. time with DTE link" value={`${req.minDtePct}%`} tip="Earth above the terrain and a DSN 70 m antenna seeing the Moon >= 6 deg.">
-          <input type="range" min={0} max={100} value={req.minDtePct} onChange={(e) => set({ minDtePct: Number(e.target.value) })} />
+          <input type="range" aria-label="Minimum time with a link to Earth, percent" min={0} max={100} value={req.minDtePct} onChange={(e) => set({ minDtePct: Number(e.target.value) })} />
         </Field>
         <Field label="Longest blackout" value={req.maxBlackoutH == null ? "no limit" : fmtH(req.maxBlackoutH)} tip="Longest stretch without a DTE link.">
-          <label className="inline"><input type="checkbox" checked={req.maxBlackoutH != null}
+          <label className="inline"><input type="checkbox" aria-label="Limit the longest blackout" checked={req.maxBlackoutH != null}
             onChange={(e) => set({ maxBlackoutH: e.target.checked ? 24 : null })} /> limit</label>
-          {req.maxBlackoutH != null && <input type="range" min={1} max={240} value={req.maxBlackoutH} onChange={(e) => set({ maxBlackoutH: Number(e.target.value) })} />}
+          {req.maxBlackoutH != null && <input type="range" aria-label="Longest blackout, hours" min={1} max={240} value={req.maxBlackoutH} onChange={(e) => set({ maxBlackoutH: Number(e.target.value) })} />}
         </Field>
         <Field label="Battery never runs out" value={req.battery ? "required" : "off"}
           tip="Simulates the battery over the stay with the power system below (starts full).">
-          <label className="inline"><input type="checkbox" checked={req.battery} onChange={(e) => set({ battery: e.target.checked })} /> require</label>
+          <label className="inline"><input type="checkbox" aria-label="Require that the battery never runs out" checked={req.battery} onChange={(e) => set({ battery: e.target.checked })} /> require</label>
           {req.battery && <PowerFields power={power} onChange={(pw) => onChange({ power: pw })} />}
         </Field>
         <Field label="Panel / antenna height" value={`${zs ? zs[z] : "?"} m`}>

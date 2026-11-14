@@ -31,7 +31,12 @@ const reduced = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 /** **bold** and "- " bullets only; the model's text is never injected as HTML. */
 function Rich({ text }: { text: string }) {
-  const inline = (s: string) => s.split(/(\*\*[^*]+\*\*)/g).map((p, i) => (p.startsWith("**") && p.endsWith("**") ? <b key={i}>{p.slice(2, -2)}</b> : <Fragment key={i}>{p.replace(/\*/g, "")}</Fragment>));
+  // in an Arabic answer, English names and "1." numbering stay left-to-right islands, so their order survives
+  const rtl = isArabic(text);
+  // a run starts and ends on a letter, digit or %; commas, colons and brackets around it follow the Arabic sentence
+  const iso = (s: string) => !rtl ? s : s.split(/([A-Za-z0-9](?:[A-Za-z0-9 .:+\-–/%'’]*[A-Za-z0-9%])?)/g)
+    .map((p, i) => (i % 2 ? <bdi key={i} dir="ltr">{p}</bdi> : p));
+  const inline = (s: string) => s.split(/(\*\*[^*]+\*\*)/g).map((p, i) => (p.startsWith("**") && p.endsWith("**") ? <b key={i}>{iso(p.slice(2, -2))}</b> : <Fragment key={i}>{iso(p.replace(/\*/g, ""))}</Fragment>));
   const blocks: ReactNode[] = [];
   let list: string[] = [];
   const flush = () => { if (list.length) blocks.push(<ul key={blocks.length}>{list.map((l, i) => <li key={i}>{inline(l)}</li>)}</ul>); list = []; };
@@ -179,14 +184,14 @@ export function CopilotPanel({ ctx, state, mode, onAction }: Props) {
                         {it.a.actions.map((x, k) => <button key={k} className="ask-go" onClick={() => onAction(x)}>{x.label} →</button>)}
                       </div>
                     )}
-                    <div className="ask-meta">
+                    <div className="ask-meta" dir="ltr">
                       <span className={`ask-badge ${it.a.provider}`} title={it.a.reason ? `Offline because ${it.a.reason}${it.a.detail ? ` (${it.a.detail})` : ""}` : it.a.model}>{PROVIDER[it.a.provider]}</span>
                       {it.a.grounding.checked > 0 && (it.a.grounding.unmatched.length
                         ? <span className="ask-warn" title="Not found in the results of Sunchaser's tools for this question: check it in the view">⚠ not traced: {it.a.grounding.unmatched.slice(0, 3).join(", ")}</span>
                         : <span className="ask-ok" title="Every number in this answer matches a result of Sunchaser's engine">✓ {it.a.grounding.checked} number{it.a.grounding.checked > 1 ? "s" : ""} traced to the engine</span>)}
                       {"speechSynthesis" in window && <button className="link" onClick={() => speak(it.a!.text)} aria-label="Read the answer aloud">🔊</button>}
                     </div>
-                    {it.a.provider === "offline" && it.a.reason && <div className="dim ask-why">Offline because {it.a.reason}.</div>}
+                    {it.a.provider === "offline" && it.a.reason && <div className="dim ask-why" dir="ltr">Offline because {it.a.reason}.</div>}
                   </div>
                 )}
               </div>
