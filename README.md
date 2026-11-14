@@ -6,7 +6,7 @@ A mission planner for the Moon's south pole, by **Team Eternal Light** for the
 [NASA Space Apps Challenge 2026](https://www.spaceappschallenge.org/2026/challenges/lunar-landing-site-navigator/)
 (*Lunar Landing Site Navigator*), NASA Space Apps Cairo.
 
-**Live app:** https://sunchaser-nasa.vercel.app
+**Live app:** https://sunchaserapp.vercel.app. New here? Press **▶ 90-second guided tour** on the home screen.
 
 At the south pole the Sun never climbs more than about 2° above a flat horizon, so a ridge 30 km away can cut a
 lander's power for days, and the same terrain can hide Earth. Sunchaser traces the real skyline from NASA's LOLA
@@ -83,4 +83,10 @@ and Deep Star Maps; ESA Hipparcos catalogue. Not a NASA product and not for flig
 
 ## Team Eternal Light
 
-Fares Sherif (lead) · Omar Sherif · Abdelrahman Adel — NASA Space Apps Cairo 2026.
+NASA Space Apps Cairo 2026.
+
+| Member | GitHub |
+|---|---|
+| Fares Sherif (team lead) | [@Fares098XI](https://github.com/Fares098XI) |
+| Omar Sherif | [@Omarx100](https://github.com/Omarx100) |
+| Abdelrahman Adel | [@Eren224](https://github.com/Eren224) |
