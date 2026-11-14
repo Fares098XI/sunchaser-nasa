@@ -1,5 +1,5 @@
 import { OrbitControls, PerformanceMonitor } from "@react-three/drei";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { Canvas, invalidate, useFrame, useThree } from "@react-three/fiber";
 import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 import type { RegionData } from "../data/manifest";
@@ -12,7 +12,7 @@ import { SKY_KM } from "./display";
 import { FarField } from "./FarField";
 import { Projector } from "./Label";
 import { Earth, Sun } from "./Sky";
-import { SkyTracker, newHits, useSkyGestures } from "./skyPick";
+import { SkyArrows, SkyTracker, newHits, useSkyGestures } from "./skyPick";
 import { BodyZoom } from "./BodyZoom";
 import { OPENING, openingBearing } from "./opening";
 import { activeOrbit } from "../director/tour";
@@ -133,17 +133,46 @@ function SitePin({ data, pin, label }: { data: RegionData; pin: GridPoint & { la
   );
 }
 
-/** The 19 landing-dispersion points, flat on the ground and always on top, coloured by their sunlight. */
+let dot: THREE.Texture | null = null;
+/** A round dot with a dark rim (white inside, so the vertex colour shows). */
+const dotTexture = () => dot ??= (() => {
+  const c = document.createElement("canvas");
+  c.width = c.height = 32;
+  const g = c.getContext("2d")!;
+  g.beginPath();
+  g.arc(16, 16, 13, 0, Math.PI * 2);
+  g.fillStyle = "#fff";
+  g.fill();
+  g.lineWidth = 4;
+  g.strokeStyle = "rgba(0,0,0,0.6)";
+  g.stroke();
+  return new THREE.CanvasTexture(c);
+})();
+
+/**
+ * The 19 landing-dispersion points as dots of a fixed screen size, coloured by their sunlight. Hidden by terrain in
+ * front of them, so close to the ground they never float through the hills.
+ */
 function RingMarks({ data, pts }: { data: RegionData; pts: { x_m: number; y_m: number; v: number }[] }) {
-  const geo = useMemo(() => new THREE.CircleGeometry(0.02, 20).rotateX(-Math.PI / 2), []);
-  return <>{pts.map((p, i) => {
-    const [x, y, z] = sceneFromGrid(data, p);
-    return (
-      <mesh key={i} geometry={geo} position={[x, y + 0.004, z]} renderOrder={20} scale={i ? 1 : 1.35}>
-        <meshBasicMaterial color={new THREE.Color(`hsl(${28 + p.v * 0.08}, ${40 + p.v * 0.6}%, ${14 + p.v * 0.5}%)`)} depthTest={false} transparent opacity={0.95} />
-      </mesh>
-    );
-  })}</>;
+  const geo = useMemo(() => {
+    const pos: number[] = [], col: number[] = [], c = new THREE.Color();
+    for (const p of pts) {
+      const [x, y, z] = sceneFromGrid(data, p);
+      pos.push(x, y + 0.004, z);
+      c.set(`hsl(${28 + p.v * 0.08}, ${40 + p.v * 0.6}%, ${14 + p.v * 0.5}%)`);
+      col.push(c.r, c.g, c.b);
+    }
+    const g = new THREE.BufferGeometry();
+    g.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
+    g.setAttribute("color", new THREE.Float32BufferAttribute(col, 3));
+    return g;
+  }, [data, pts]);
+  useEffect(() => () => geo.dispose(), [geo]);
+  return (
+    <points geometry={geo} renderOrder={20}>
+      <pointsMaterial size={10} sizeAttenuation={false} vertexColors map={dotTexture()} alphaTest={0.5} transparent />
+    </points>
+  );
 }
 
 type Controls = { enabled: boolean; target: THREE.Vector3; update: () => void };
@@ -152,9 +181,11 @@ type Controls = { enabled: boolean; target: THREE.Vector3; update: () => void };
  * Camera moves that are not the user's own drag: the descent from orbit, flying the orbit centre to a double-clicked
  * point, flying back to the opening view; plus keeping the eye above the ground.
  */
-function CameraDirector({ data, view, intro, controls, flyTo, resetKey, fit, standing, hold }: {
+function CameraDirector({ data, view, intro, controls, flyTo, face, resetKey, fit, standing, hold }: {
   data: RegionData; view: { cam: THREE.Vector3; target: THREE.Vector3 }; intro?: boolean;
   controls: React.RefObject<Controls | null>; flyTo: React.RefObject<THREE.Vector3 | null>; resetKey?: number;
+  /** a sky direction to turn toward (the Sun or Earth), keeping the orbit centre */
+  face: React.RefObject<THREE.Vector3 | null>;
   /** frame a box (a new Light Path route): centre + radius in km */
   fit?: { key: string; centre: THREE.Vector3; radius: number } | null;
   standing?: boolean;
@@ -200,6 +231,12 @@ function CameraDirector({ data, view, intro, controls, flyTo, resetKey, fit, sta
       start(toT.clone().add(off.multiplyScalar(Math.min(1, 2.5 / off.length()))), toT, 1.0);
       flyTo.current = null;
     }
+    if (face.current && c) {
+      // swing round the orbit centre to look toward the body, 10° down, so a body near the horizon is in view
+      const d = face.current, r = camera.position.distanceTo(c.target), hz = Math.hypot(d.x, d.z) || 1, p = (10 * Math.PI) / 180;
+      start(c.target.clone().add(new THREE.Vector3((-d.x / hz) * r * Math.cos(p), r * Math.sin(p), (-d.z / hz) * r * Math.cos(p))), c.target.clone(), 1.2);
+      face.current = null;
+    }
     const tw = tween.current;
     if (tw && c) {
       tw.t = Math.min(1, tw.t + Math.min(dt, 1 / 30) / tw.dur); // a slow frame never makes the camera jump
@@ -244,8 +281,9 @@ function TourOrbit({ clock, controls }: { clock: () => number; controls: React.R
 /** Everything that belongs to one region: its opening view, terrain, far field, pins, route, walker and cameras.
  * Keyed by region, so a new site rebuilds only this part; the canvas, sky, Sun and Earth stay (no new WebGL context). */
 function RegionScene({ data, horizon, sun, earth, period, local, penumbra, pin, pinLabel, onPick, paint, intro, resetKey,
-  route, routeLabels, steep, astronaut, zoomTo, onZoomArrived, hold, tour, sunPos, earthPos, onReady, onZoomOut, plan, marks }: Omit<Props, "active" | "onSeek" | "onFocus" | "epoch" | "frozen"> & {
+  route, routeLabels, steep, astronaut, zoomTo, onZoomArrived, hold, tour, sunPos, earthPos, onReady, onZoomOut, plan, marks, face }: Omit<Props, "active" | "onSeek" | "onFocus" | "epoch" | "frozen"> & {
   pinLabel: React.RefObject<HTMLDivElement | null>; sunPos: THREE.Vector3; earthPos: THREE.Vector3;
+  face: React.RefObject<THREE.Vector3 | null>;
 }) {
   const controls = useRef<Controls | null>(null);
   const flyTo = useRef<THREE.Vector3 | null>(null);
@@ -334,7 +372,7 @@ function RegionScene({ data, horizon, sun, earth, period, local, penumbra, pin, 
       {!astronaut && !route && marks?.ring && <RingMarks data={data} pts={marks.ring} />}
       {route && routeLabels && <RouteView data={data} route={route} hour={period.start + local} labels={routeLabels} follow={route.follow ? controls : undefined} />}
       {tour && !astronaut && <TourOrbit clock={tour.clock} controls={controls} />}
-      <CameraDirector data={data} view={view} intro={intro} controls={controls} flyTo={flyTo} resetKey={resetKey} fit={routeFit} standing={!!astronaut} hold={hold} />
+      <CameraDirector data={data} view={view} intro={intro} controls={controls} flyTo={flyTo} face={face} resetKey={resetKey} fit={routeFit} standing={!!astronaut} hold={hold} />
       {!astronaut && <BodyZoom active={!!zoomTo} controls={controls}
         target={zoomTo ? { pos: zoomTo === "sun" ? sunPos : earthPos, radius: zoomTo === "sun" ? (SUN_RADIUS_KM / sun.dist) * SKY_KM : (EARTH_RADIUS_KM / earth.dist) * SKY_KM } : null}
         onArrived={() => onZoomArrived?.()} />}
@@ -359,6 +397,7 @@ export function SceneRoot(props: Props) {
   const setMark = props.marks?.sunset;
   const setAt = useMemo(() => setMark ? new THREE.Vector3(...skyDirection(setMark.az, setMark.el)).multiplyScalar(SKY_KM / 2) : null, [setMark?.az, setMark?.el]);
   const hits = useRef(newHits());
+  const face = useRef<THREE.Vector3 | null>(null);
   if (import.meta.env.DEV) (window as unknown as { __sky: unknown }).__sky = hits.current; // gesture tests
   const sunDir = skyDirection(sun.az, sun.el);
   const quat = quatAt(period.earthQ, local);
@@ -394,7 +433,7 @@ export function SceneRoot(props: Props) {
         {/* Lights only serve the fallback material shown until horizons load */}
         <ambientLight intensity={0.03} />
         <directionalLight position={[sunDir[0] * 50, sunDir[1] * 50, sunDir[2] * 50]} intensity={3} color="#fff6e6" />
-        <RegionScene key={`${data.manifest.region.id}:${props.epoch ?? 0}`} {...props} pinLabel={pinLabel} sunPos={sunPos} earthPos={earthPos} />
+        <RegionScene key={`${data.manifest.region.id}:${props.epoch ?? 0}`} {...props} pinLabel={pinLabel} sunPos={sunPos} earthPos={earthPos} face={face} />
         <Sun sun={sun} />
         <Suspense fallback={null}>
           <Earth earth={earth} quat={quat} sunDir={sunDir} />
@@ -405,6 +444,10 @@ export function SceneRoot(props: Props) {
       </Canvas>
       <div ref={pinLabel} className="pin-label floating" style={{ display: astronaut || !active || props.route ? "none" : undefined }}>{pin.label}</div>
       <div ref={setLabel} className="pin-label floating set-mark" style={{ display: setMark && active ? undefined : "none" }}><span>{setMark?.label}</span><i aria-hidden /></div>
+      {active && !astronaut && !tour && !props.zoomTo && <SkyArrows hits={hits} onFace={(b) => {
+        face.current = new THREE.Vector3(...(b === "sun" ? sunDir : skyDirection(earth.az, earth.el)));
+        invalidate();
+      }} />}
     </div>
   );
 }

@@ -7,10 +7,11 @@ import * as THREE from "three";
  * press on the Sun and drag = move time (Grab the Sun); tap the Sun or Earth = fly to it.
  * Every drag ends on pointerup, pointercancel, lost capture or window blur, so the Sun never sticks to the mouse.
  */
-export interface ScreenBody { x: number; y: number; r: number; on: boolean }
+/** x, y, r: screen pixels; ax, ay: unit screen direction toward the body (y down), valid even when it is behind the camera */
+export interface ScreenBody { x: number; y: number; r: number; on: boolean; ax: number; ay: number }
 export interface SkyHits { sun: ScreenBody; earth: ScreenBody; camera: THREE.PerspectiveCamera | null; w: number; h: number }
 export const newHits = (): SkyHits => ({
-  sun: { x: 0, y: 0, r: 0, on: false }, earth: { x: 0, y: 0, r: 0, on: false }, camera: null, w: 1, h: 1,
+  sun: { x: 0, y: 0, r: 0, on: false, ax: 0, ay: 0 }, earth: { x: 0, y: 0, r: 0, on: false, ax: 0, ay: 0 }, camera: null, w: 1, h: 1,
 });
 
 interface Tracked { pos: THREE.Vector3; radius: number }
@@ -32,11 +33,51 @@ export function SkyTracker({ hits, sun, earth }: { hits: React.RefObject<SkyHits
       b.y = ((1 - v.y) / 2) * size.height;
       const d = cam.position.distanceTo(t.pos);
       b.r = (Math.atan(t.radius / d) / Math.tan((cam.fov * Math.PI) / 360)) * (size.height / 2);
+      v.copy(t.pos).applyMatrix4(cam.matrixWorldInverse); // camera space: x right, y up
+      const n = Math.hypot(v.x, v.y) || 1;
+      b.ax = v.x / n;
+      b.ay = -v.y / n;
     };
     put(h.sun, sun);
     put(h.earth, earth);
   });
   return null;
+}
+
+/**
+ * When the Sun or Earth is out of view, a pill near the top of the view says which way it is; clicking it turns the
+ * camera to face it. Kept in the middle strip of the screen, clear of the side panels.
+ */
+export function SkyArrows({ hits, onFace }: { hits: React.RefObject<SkyHits>; onFace: (body: "sun" | "earth") => void }) {
+  const sun = useRef<HTMLButtonElement>(null), earth = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
+    let raf = 0;
+    const place = (el: HTMLButtonElement | null, b: ScreenBody, row: number) => {
+      if (!el) return;
+      const { w, h } = hits.current;
+      const inView = b.on && b.x > 0 && b.x < w && b.y > 0 && b.y < h;
+      const show = w > 200 && (b.ax !== 0 || b.ay !== 0) && !inView;
+      el.style.display = show ? "" : "none";
+      if (!show) return;
+      const right = b.ax >= 0;
+      el.style.transform = `translate(${right ? w * 0.68 : w * 0.24}px, ${72 + row * 40}px) translate(${right ? "-100%" : "0"}, 0)`;
+      el.style.setProperty("--a", `${Math.atan2(b.ay, b.ax)}rad`);
+      el.classList.toggle("right", right);
+    };
+    const loop = () => {
+      raf = requestAnimationFrame(loop);
+      place(sun.current, hits.current.sun, 0);
+      place(earth.current, hits.current.earth, 1);
+    };
+    raf = requestAnimationFrame(loop);
+    return () => cancelAnimationFrame(raf);
+  }, []);
+  return <>
+    <button ref={sun} className="sky-arrow sun" style={{ display: "none" }} onClick={() => onFace("sun")} title="Turn to face the Sun">
+      <i aria-hidden />Sun</button>
+    <button ref={earth} className="sky-arrow earth" style={{ display: "none" }} onClick={() => onFace("earth")} title="Turn to face Earth">
+      <i aria-hidden />Earth</button>
+  </>;
 }
 
 /** View direction under a client pixel. */

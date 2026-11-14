@@ -622,6 +622,15 @@ table.compare td small.short { display: block; font-size: 12px; color: var(--dan
 @media (max-width: 760px) { .earth-inset { display: none; } }
 
 .pin-label.floating { position: absolute; left: 0; top: 0; pointer-events: none; opacity: 0; transition: opacity 200ms; will-change: transform; z-index: 1; }
+/* Sun / Earth out of view: which way to turn (scene/skyPick.tsx SkyArrows) */
+.sky-arrow { position: absolute; left: 0; top: 0; z-index: 2; display: flex; align-items: center; gap: 7px; padding: 6px 12px 6px 10px; border-radius: 999px;
+  font: 600 13px var(--font-ui); border: 1px solid currentColor; background: rgba(5, 6, 8, 0.72); backdrop-filter: blur(8px); cursor: pointer; }
+.sky-arrow.right { flex-direction: row-reverse; padding: 6px 10px 6px 12px; }
+.sky-arrow.sun { color: var(--sun); }
+.sky-arrow.earth { color: var(--earth); }
+.sky-arrow i { width: 0; height: 0; border-left: 8px solid currentColor; border-top: 5px solid transparent; border-bottom: 5px solid transparent; transform: rotate(var(--a, 0rad)); }
+.sky-arrow:hover { background: rgba(20, 22, 28, 0.85); }
+.sky-arrow:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
 .pin-label.floating.globe { margin-top: -12px; }
 .pin-label.globe.atlas { pointer-events: auto; cursor: pointer; font-size: 12.5px; padding: 3px 8px; border-color: rgba(242, 242, 242, 0.5); box-shadow: none; }
 .pin-label.globe.atlas:hover { color: #fff; background: rgba(14, 17, 23, 0.95); }
