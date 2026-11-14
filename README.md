@@ -81,6 +81,10 @@ Sci.* 203:105119; Barker et al. 2023, *PSJ* 4:183); permanent-shadow and illumin
 810-005; LROC; NASA Visible Earth Blue Marble and Black Marble; NASA Scientific Visualization Studio CGI Moon Kit
 and Deep Star Maps; ESA Hipparcos catalogue. Not a NASA product and not for flight operations.
 
+## Use of AI
+
+Most of the code was written with Claude Code (Anthropic) under the team's direction; the team chose the approach and the NASA data, set every validation pass rule, and checked the results against NASA references. The in-app copilot uses Google Gemini (Groq as a backup) and only reports numbers computed by the engine. The demo video's voiceover is AI-generated (ElevenLabs).
+
 ## Team Eternal Light
 
 NASA Space Apps Cairo 2026.
