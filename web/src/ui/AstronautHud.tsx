@@ -76,6 +76,7 @@ export function AstronautHud({ look, lonDeg, sun, earth, sunFrac, earthFrac, sun
   }, []);
   useEffect(() => { document.body.classList.toggle("astro-helmet", helmet); }, [helmet]);
   const touch = typeof matchMedia !== "undefined" && matchMedia("(pointer: coarse)").matches;
+  const [tips, setTips] = useState(true);
   return (
     <>
       <div className="visor" aria-hidden />
@@ -92,21 +93,32 @@ export function AstronautHud({ look, lonDeg, sun, earth, sunFrac, earthFrac, sun
         <span className="num">Earth {Math.round(earthFrac * 100)}% · {earth.el.toFixed(1)}° up · DSN {dsnUp}/{dsnTotal}</span>
       </div>
       {!helmet && (
-        <div className="astro-card glass">
+        <div className={`astro-card glass ${tips ? "" : "mini"}`}>
           {!touch && <p className="astro-cta">Click the view to put the helmet on</p>}
+          {tips && <>
           <ul className="astro-keys">
-            <li><kbd>{touch ? "drag" : "mouse"}</kbd> look around</li>
-            <li><kbd>W A S D</kbd> walk{touch ? " (or the stick)" : ""}</li>
-            <li><kbd>Shift</kbd> lunar lope</li>
-            <li><kbd>Space</kbd> jump in 1/6 g</li>
-            <li><kbd>M</kbd> map · <kbd>wheel</kbd> zoom</li>
-            <li><kbd>Esc</kbd> {touch ? "stand up" : "helmet off, then stand up"}</li>
+            {touch ? <>
+              <li><kbd>drag</kbd> look around</li>
+              <li><kbd>stick</kbd> walk · <kbd>Run</kbd> lunar lope · <kbd>Jump</kbd> in 1/6 g</li>
+            </> : <>
+              <li><kbd>mouse</kbd> look around</li>
+              <li><kbd>W A S D</kbd> walk</li>
+              <li><kbd>Shift</kbd> lunar lope</li>
+              <li><kbd>Space</kbd> jump in 1/6 g</li>
+              <li><kbd>M</kbd> map · <kbd>wheel</kbd> zoom</li>
+              <li><kbd>Esc</kbd> helmet off, then stand up</li>
+            </>}
           </ul>
           <p className="dim small"><i className="astro-line" /> the thin line is the computed horizon behind every number. Your eyes are 2 m up, where every horizon is computed.</p>
           <label className="toggle small" title="The ground's shape is real NASA LOLA terrain (20 m). Rocks and craters smaller than that are not measured anywhere: they are drawn for a human-scale view and never used by any number.">
             <input type="checkbox" checked={detail} onChange={(e) => onDetail(e.target.checked)} /> rocks &amp; small craters (illustrative)
           </label>
-          <button className="link" onClick={onExit}>stand up (Esc)</button>
+          </>}
+          <div className="astro-card-foot">
+            {/* touch screens have no helmet to hide this card: let it fold away */}
+            {touch && tips && <button className="link" onClick={() => setTips(false)}>got it</button>}
+            <button className="link" onClick={onExit}>stand up{touch ? "" : " (Esc)"}</button>
+          </div>
         </div>
       )}
     </>

@@ -873,6 +873,8 @@ export default function App() {
       <div className={`vignette ${mode !== "explore" && mode !== "home" ? "deep" : ""}`} aria-hidden />
       {switching && mode !== "home" && <div className="region-switch glass" role="status"><i aria-hidden />Flying to {regionName}…
         {regionId === "pin" && pinBuild && pinBuild.stage !== "error" && <span className="dim"> {pinBuild.stage === "terrain" ? "loading 59 m NASA terrain" : `casting shadows ${Math.round(pinBuild.frac * 100)} %`}</span>}</div>}
+      {/* the dive into a pin slows while its 3D scene is built, over a globe that may be all night side: say so */}
+      {diving && regionId === "pin" && <div className="region-switch glass" role="status"><i aria-hidden />Landing at your pin… <span className="dim">building the 3D view</span></div>}
       {(mode === "home" || globeFade || prewarm) && (
         <div className={`globe-layer ${globeFade ? "fading" : ""} ${globeIn ? "arriving" : ""} ${mode !== "home" && !globeFade ? "hidden" : ""}`}>
           <GlobeView hidden={mode !== "home" && !globeFade} leaving={mode !== "home"} preload={touring || prewarm} startAt={globeStart} data={data} period={pt} local={local} sun={sky.sun} earth={sky.earth} sites={polarSites} atlas={atlasSites}

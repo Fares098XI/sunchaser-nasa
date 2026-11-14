@@ -48,7 +48,7 @@ export async function ask(conv: Conversation, question: string, ctx: ToolCtx, st
       break;
     }
     if (!reply.calls?.length) {
-      const text = (reply.text ?? "").trim();
+      const text = cleanText(reply.text ?? "");
       if (!text) { reason = "empty answer"; break; }
       return { text, actions: dedupe(actions), provider: reply.provider, model: reply.model, grounding: ground(text, [question, state, ...results]), tools };
     }
@@ -67,6 +67,10 @@ export async function ask(conv: Conversation, question: string, ctx: ToolCtx, st
   const off = await answerOffline(question, ctx, state);
   return { ...off, actions: dedupe([...actions, ...off.actions]), provider: "offline", reason, detail, grounding: ground(off.text, [question, state, ...off.results]), tools: off.tools };
 }
+
+/** Models sometimes paste a tool's action object (or a code block) into the answer; the action is shown as a button anyway. */
+export const cleanText = (s: string) =>
+  s.replace(/```(?:json)?[\s\S]*?```/g, "").replace(/\{[^{}]*"(?:view|site_id|landing_utc|label)"\s*:[^{}]*\}/g, "").replace(/\n{3,}/g, "\n\n").trim();
 
 const dedupe = (a: Action[]) => a.filter((x, i) => a.findIndex((y) => y.view === x.view && y.label === x.label) === i).slice(0, 3);
 

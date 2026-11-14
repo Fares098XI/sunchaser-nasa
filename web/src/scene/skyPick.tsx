@@ -60,7 +60,7 @@ export function SkyArrows({ hits, onFace }: { hits: React.RefObject<SkyHits>; on
       el.style.display = show ? "" : "none";
       if (!show) return;
       const right = b.ax >= 0;
-      el.style.transform = `translate(${right ? w * 0.68 : w * 0.24}px, ${72 + row * 40}px) translate(${right ? "-100%" : "0"}, 0)`;
+      el.style.transform = `translate(${right ? w * 0.68 : w * 0.24}px, ${(w <= 760 ? 124 : 72) + row * 40}px) translate(${right ? "-100%" : "0"}, 0)`;
       el.style.setProperty("--a", `${Math.atan2(b.ay, b.ax)}rad`);
       el.classList.toggle("right", right);
     };

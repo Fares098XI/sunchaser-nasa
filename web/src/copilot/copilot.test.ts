@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { ground } from "./agent";
+import { cleanText, ground } from "./agent";
 import { searchKnowledge } from "./knowledge";
 import { findDate, findSites } from "./offline";
 import { findSite } from "./tools";
@@ -16,6 +16,15 @@ describe("copilot grounding", () => {
   });
   it("flags a number no tool returned, and ignores dates, times, check ids and small counts", () => {
     expect(ground("Sunlight 93.1 % on 2027-03-15T12:00 (V2), top 3 sites", src)).toEqual({ checked: 1, unmatched: ["93.1"] });
+  });
+});
+
+describe("answer cleanup", () => {
+  it("drops an action object the model pasted into its answer", () => {
+    const raw = 'Nobile Rim 2 - land at 2027-01-08 08:00 UTC.\n\nThis window meets all requirements.\n\n{"days":14,"label":"Show Nobile Rim 2 Landing","landing_utc":"2027-01-08T08:00","site_id":"nobile-rim-2","view":"globe"}';
+    expect(cleanText(raw)).toBe("Nobile Rim 2 - land at 2027-01-08 08:00 UTC.\n\nThis window meets all requirements.");
+    expect(cleanText('Here:\n```json\n{"view":"compare"}\n```')).toBe("Here:");
+    expect(cleanText("Sunlight {about} 88 %")).toBe("Sunlight {about} 88 %"); // ordinary braces stay
   });
 });
 

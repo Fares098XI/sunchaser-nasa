@@ -198,8 +198,8 @@ input[type="range"]::-moz-range-thumb { width: 12px; height: 12px; border: 0; bo
   .rail button.active { box-shadow: inset 0 -2px 0 var(--sun); }
   .rail button:disabled { display: none; }
   .brand { top: 14px; left: 16px; }
-  .inspector { left: 12px; right: 12px; width: auto; top: auto; bottom: 84px; max-height: 46%; padding: 12px 14px; }
-  .inspector .method, .inspector .hint, .coords { display: none; }
+  .inspector { left: 12px; right: 12px; width: auto; top: auto; bottom: 84px; max-height: 36%; padding: 12px 14px; }
+  .inspector .method, .inspector .hint, .inspector .source, .coords { display: none; }
   .timebar { bottom: 12px; padding: 8px 10px; gap: 10px; }
   .when { min-width: 0; font-size: 13px; }
   .when .dim, .speed { display: none; }
@@ -662,9 +662,9 @@ table.compare td small.short { display: block; font-size: 12px; color: var(--dan
 .earth-inset:focus-visible, .view-reset:focus-visible { outline: 2px solid var(--earth); outline-offset: 2px; }
 .view-reset { position: absolute; top: 16px; right: 400px; /* clear of the inspector: 16 px margin + 372 px + a gap */ display: inline-flex; align-items: center; gap: 7px; padding: 8px 13px; font-size: 13.5px; color: var(--ink); cursor: pointer; }
 .view-reset:hover { border-color: rgba(194, 190, 181, 0.35); }
-@media (max-width: 760px) { .view-reset { top: auto; right: 12px; bottom: calc(46% + 96px); } .focus-card { left: 12px; right: 12px; width: auto; } }
+@media (max-width: 760px) { .view-reset { top: auto; right: 12px; bottom: calc(36% + 96px); } .focus-card { left: 12px; right: 12px; width: auto; } }
 
-@media (max-width: 760px) { .ticks span:nth-child(even) { display: none; } }
+@media (max-width: 760px) { .ticks span:not(:nth-child(4n+1)) { display: none; } .region-switch { top: 124px; } } /* below the menu */
 
 /* ---------- free-explore Moon ---------- */
 .home.exploring .home-copy { max-width: 360px; }
@@ -712,7 +712,7 @@ table.compare td small.short { display: block; font-size: 12px; color: var(--dan
 .astro-g .dim { font-size: 13px; }
 .astro-g.legend { justify-content: center; gap: 6px; font-size: 13px; }
 .astro-line { display: inline-block; width: 18px; height: 2px; background: var(--earth); border-radius: 1px; }
-@media (max-width: 760px) { .astro-compass { width: calc(100% - 24px); } .astro-gauges { bottom: 84px; width: calc(100% - 24px); } .astro-g { min-width: 0; padding: 0 8px; } .astro-g.legend { display: none; } }
+@media (max-width: 760px) { .astro-compass { top: 116px; width: calc(100% - 24px); } /* under the menu */ .astro-gauges { bottom: 84px; width: calc(100% - 24px); } .astro-g { min-width: 0; padding: 0 8px; } .astro-g.legend { display: none; } }
 
 /* ---------- astronaut helmet: visor, suit display, controls card ---------- */
 .visor { position: absolute; inset: 0; pointer-events: none; z-index: 2;
@@ -753,7 +753,9 @@ body.astro-helmet canvas { cursor: none; }
 /* the on-screen stick is for touch screens only; there the suit readouts sit under the compass, clear of it */
 @media not all and (pointer: coarse) { body .joy { display: none; } } /* body: beats the .joy rule further down */
 @media (pointer: coarse) { .suit, body.astro-helmet .suit { bottom: auto; top: 84px; } }
-@media (max-width: 760px) { .suit { padding: 6px 10px; } .suit-pwr { left: 12px; } .suit-com { right: 12px; } .suit b { font-size: 18px; } .astro-keys { grid-template-columns: 1fr; } .astro-card { bottom: 230px; } }
+@media (max-width: 760px) { .suit { padding: 6px 10px; } .suit-pwr { left: 12px; } .suit-com { right: 12px; } .suit b { font-size: 18px; } .astro-keys { grid-template-columns: 1fr; } .astro-card { bottom: 290px; left: 16px; right: 16px; transform: none; max-width: none; } .astro-card.mini { left: auto; padding: 6px 14px; }
+  body .suit, body.astro-helmet .suit { top: 188px; bottom: auto; max-width: calc(50% - 18px); } } /* under the compass, side by side */
+.astro-card-foot { display: flex; justify-content: flex-end; gap: 18px; }
 
 /* ---------- astronaut game controls ---------- */
 .joy { position: absolute; left: 24px; bottom: 112px; display: flex; align-items: flex-end; gap: 12px; z-index: 3; user-select: none; }
@@ -830,7 +832,7 @@ body.astro-helmet canvas { cursor: none; }
 .astro-map-head .link { margin-left: auto; }
 .astro-map-canvas { display: block; border-radius: 10px; border: 1px solid var(--line); cursor: crosshair; max-width: 100%; }
 .astro-map .hint { max-width: 720px; }
-@media (max-width: 760px) { .minimap-wrap { top: 64px; right: 12px; } }
+@media (max-width: 760px) { .minimap-wrap { top: auto; bottom: 150px; right: 12px; } } /* bottom right, beside the stick: the top holds the compass and suit readouts */
 
 .globe-layer.arriving { animation: globeIn 700ms ease both; }
 @keyframes globeIn { from { opacity: 0; } }
@@ -1460,7 +1462,7 @@ select { accent-color: var(--gold); }
 
 /* phones: the copilot button shrinks to a round ✦ so it never covers what you read; long board titles fit */
 @media (max-width: 760px) {
-  .ask-fab { width: 52px; height: 52px; padding: 0; justify-content: center; border-radius: 50%; right: 14px; bottom: 96px; }
+  .ask-fab { width: 44px; height: 44px; padding: 0; justify-content: center; border-radius: 50%; right: 12px; top: 8px; bottom: auto; } /* top corner: the bottom half is the panel */
   .ask-fab .ask-spark { font-size: 22px; }
   .ask-fab-label { display: none; }
   .board-title { font-size: 16px; }
@@ -1471,6 +1473,19 @@ select { accent-color: var(--gold); }
   .home-copy { background: linear-gradient(180deg, rgba(5, 6, 8, 0.82), rgba(5, 6, 8, 0.68)); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); padding: 18px; border-radius: 20px; }
   /* the intro text covers the globe on a phone: its study-area label waits until you start exploring */
   .app:has(.home:not(.exploring)) .pin-label.globe.study { display: none; }
+  /* the essentials only, in a card at the bottom, so the Moon shows above it */
+  .home:not(.exploring):not(:has(.pin-card)) .home-copy { margin-top: auto; }
+  .home-copy > .eyebrow, .home-lede, .home-pin-hint { display: none; }
+  .home-title { font-size: 40px; }
+  .home-tag { font-size: 17px; margin-bottom: 12px; }
+  .home-live { margin-bottom: 14px; }
+  .home-chip { height: 32px; }
+  .home-chip.live { height: auto; min-height: 32px; padding: 4px 12px; }
+  .home-cta { gap: 8px; }
+  .home .home-cta .cta { min-height: 44px; padding: 0 16px; font-size: 15px; flex: 1 1 auto; }
+  .home-cta.second { margin-top: 8px; }
+  .goto-label { margin-top: 14px; }
+  .goto input { min-width: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
   .home-title, .brand-name, .link-now.up .link-mark, .status.go .status-mark { animation: none; }
