@@ -94,3 +94,7 @@ NASA Space Apps Cairo 2026.
 | Fares Sherif (team lead) | [@Fares098XI](https://github.com/Fares098XI) |
 | Omar Sherif | [@Omarx100](https://github.com/Omarx100) |
 | Abdelrahman Adel | [@Eren224](https://github.com/Eren224) |
+
+## License
+
+Sunchaser's source code is released under the [MIT License](LICENSE). NASA, ESA and JAXA data, imagery, fonts and music keep their own terms; see Data and credits above.
